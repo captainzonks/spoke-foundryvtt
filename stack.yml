@@ -1,0 +1,57 @@
+# ==============================================================================
+# SPOKE-FOUNDRYVTT - MODULE MANIFEST
+# ==============================================================================
+# Description: Spoke module manifest for the FoundryVTT virtual tabletop
+# Version: 1.0.0
+# ==============================================================================
+
+name: foundryvtt
+version: "1.0.0"
+description: "FoundryVTT virtual tabletop gaming platform"
+
+############################  REQUIREMENTS
+
+requires:
+  networks:
+    - name: troxy
+      required: true
+  hub_services:
+    - traefik
+
+############################  ENVIRONMENT
+
+env:
+  hub:
+    - TZ
+    - DOMAIN
+    - SPOKE_DIR
+    - SECRETS_DIR
+    - APPDATA_DIR
+    - PUID
+    - DGID
+    - LOCALTIME
+    - CA_CERT
+    - SSL_CERT_FILE
+    - REQUESTS_CA_BUNDLE
+    - CURL_CA_BUNDLE
+
+  module:
+    - FOUNDRYVTT_IMAGE
+    - FOUNDRYVTT_IP
+    - FOUNDRYVTT_HOST
+    - FOUNDRYVTT_DATA_DIR
+
+############################  SECRETS
+
+secrets:
+  - name: foundryvtt_secrets_json
+    path: foundryvtt/foundryvtt_secrets.json
+    required: true
+    description: "FoundryVTT license key and admin password (config.json)"
+
+############################  HEALTH
+
+health:
+  service: foundryvtt
+  path: /
+  port: 30000

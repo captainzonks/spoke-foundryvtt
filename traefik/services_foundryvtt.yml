@@ -1,0 +1,6 @@
+http:
+  services:
+    foundryvtt-svc:
+      loadBalancer:
+        servers:
+          - url: http://foundryvtt:30000

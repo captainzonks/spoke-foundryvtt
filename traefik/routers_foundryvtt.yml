@@ -1,0 +1,19 @@
+http:
+  routers:
+    foundryvtt:
+      rule: Host(`foundry.{{ env "DOMAIN" }}`)
+      entryPoints: "websecure"
+      middlewares: sablier-foundryvtt@file,chain-no-auth@file
+      service: foundryvtt-svc@file
+
+  middlewares:
+    sablier-foundryvtt:
+      plugin:
+        sablier:
+          sablierUrl: http://sablier:10000
+          group: foundryvtt
+          sessionDuration: 30m
+          dynamic:
+            displayName: FoundryVTT
+            theme: hacker-terminal
+            refreshFrequency: 5s

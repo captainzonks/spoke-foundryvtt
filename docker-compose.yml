@@ -1,0 +1,121 @@
+# ==============================================================================
+# SPOKE-FOUNDRYVTT - DOCKER COMPOSE
+# ==============================================================================
+# Description: FoundryVTT virtual tabletop gaming platform
+# Version: 1.0.0
+# Created: 2026-02-12
+# Modified: 2026-02-12
+# ==============================================================================
+# Module: foundryvtt
+# Config Sources: .env (hub vars injected by Spoke + module defaults)
+# Security: non-root (PUID:DGID), secrets via config.json, caps dropped
+# ==============================================================================
+# Container Images:
+#   FOUNDRYVTT_IMAGE (felddy/foundryvtt:13.351.0)
+# Documentation:
+#   - FoundryVTT Docker: https://github.com/felddy/foundryvtt-docker
+#   - FoundryVTT: https://foundryvtt.com/
+# Networks:
+#   - troxy (192.168.35.0/24) - main application network
+# Dependencies:
+#   - Hub: traefik (routing)
+# ==============================================================================
+
+name: spoke-foundryvtt
+
+############################ EXTENSIONS
+
+x-ssl: &ssl
+  environment:
+    - SSL_CERT_FILE=${SSL_CERT_FILE}
+    - REQUESTS_CA_BUNDLE=${REQUESTS_CA_BUNDLE}
+    - CURL_CA_BUNDLE=${CURL_CA_BUNDLE}
+
+  volumes:
+    - ${CA_CERT}:/etc/ssl/certs/ca-certificates.crt:ro
+
+x-logging-small: &log_small
+  logging:
+    driver: json-file
+    options:
+      max-size: 10m
+      max-file: "2"
+
+############################ NETWORKS
+
+networks:
+  troxy:
+    external: true
+
+############################# SECRETS
+
+secrets:
+  foundryvtt_secrets_json:
+    file: ${SECRETS_DIR}/foundryvtt/foundryvtt_secrets.json
+
+############################# SERVICES
+
+services:
+  #======================================
+  # FOUNDRYVTT - Virtual Tabletop Gaming Platform
+  #======================================
+  foundryvtt:
+    <<: [*ssl, *log_small]
+    image: ${FOUNDRYVTT_IMAGE}
+    hostname: foundryvtt
+    container_name: foundryvtt
+    restart: on-failure
+    init: true
+
+    security_opt:
+      - no-new-privileges=true
+    mem_limit: 1024M
+    cpus: 2.0
+    cap_drop:
+      - ALL
+    user: ${PUID}:${DGID}
+
+    networks:
+      troxy:
+        ipv4_address: ${FOUNDRYVTT_IP}
+
+    expose:
+      - 30000/tcp
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-s", "http://localhost:30000"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+    environment:
+      - TZ=${TZ}
+      - DOMAIN=${DOMAIN}
+      - FOUNDRY_HOSTNAME=${FOUNDRYVTT_HOST}
+      - FOUNDRY_PROXY_SSL=true
+      - FOUNDRY_PROXY_PORT=443
+      - FOUNDRY_PROTOCOL=4
+      - FOUNDRY_MINIFY_STATIC_FILES=true
+      - CONTAINER_CACHE_SIZE=1
+      - CONTAINER_PATCHES=/data/container_patches
+      - CONTAINER_URL_FETCH_RETRY=3
+      - CONTAINER_VERBOSE=true
+      - FOUNDRY_COMPRESS_WEBSOCKET=true
+      - FOUNDRY_CSS_THEME=foundry
+      - FOUNDRY_TELEMETRY=true
+
+    volumes:
+      - ${FOUNDRYVTT_DATA_DIR}:/data/:rw
+      - ${LOCALTIME}:/etc/localtime:ro
+
+    tmpfs:
+      - /tmp/:rw,size=100m
+
+    labels:
+      - sablier.enable=true
+      - sablier.group=foundryvtt
+
+    secrets:
+      - source: foundryvtt_secrets_json
+        target: config.json
