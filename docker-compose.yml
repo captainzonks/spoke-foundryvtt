@@ -1,24 +1,30 @@
 # ==============================================================================
-# SPOKE-FOUNDRYVTT - DOCKER COMPOSE
+# FOUNDRYVTT MODULE - DOCKER COMPOSE
 # ==============================================================================
 # Description: FoundryVTT virtual tabletop gaming platform
-# Version: 1.0.0
+# Author: Matt Barham
 # Created: 2026-02-12
-# Modified: 2026-02-12
+# Modified: 2026-04-21
+# Version: 1.0.1
+# Host: Your Server
 # ==============================================================================
-# Module: foundryvtt
-# Config Sources: .env (hub vars injected by Spoke + module defaults)
+# Component: module: foundryvtt
+# Config Sources: base.env + .env.example + modules.yml overrides → .env (generated)
 # Security: non-root (PUID:DGID), secrets via config.json, caps dropped
 # ==============================================================================
 # Container Images:
-#   FOUNDRYVTT_IMAGE (felddy/foundryvtt:13.351.0)
+#   See modules/foundryvtt/.env.example for complete image paths and versions
+#   (FOUNDRYVTT_IMAGE)
 # Documentation:
-#   - FoundryVTT Docker: https://github.com/felddy/foundryvtt-docker
 #   - FoundryVTT: https://foundryvtt.com/
+#   - FoundryVTT Docker: https://github.com/felddy/foundryvtt-docker
 # Networks:
 #   - troxy (192.168.35.0/24) - main application network
 # Dependencies:
 #   - Hub: traefik (routing)
+# External Integrations:
+#   - [x] Traefik routing
+#   - [x] Sablier on-demand start/stop
 # ==============================================================================
 
 name: spoke-foundryvtt
