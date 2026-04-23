@@ -1,3 +1,17 @@
+# ==============================================================================
+# FOUNDRYVTT MODULE - TRAEFIK SERVICES
+# ==============================================================================
+# Description: Traefik dynamic service definitions for the foundryvtt module
+# Author: Matt Barham
+# Created: 2026-02-12
+# Modified: 2026-04-21
+# Version: 1.0.1
+# Host: Your Server
+# ==============================================================================
+# Type: Traefik Dynamic Config (services)
+# Component: module: foundryvtt
+# ==============================================================================
+
 http:
   services:
     foundryvtt-svc:

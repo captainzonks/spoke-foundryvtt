@@ -1,3 +1,17 @@
+# ==============================================================================
+# FOUNDRYVTT MODULE - TRAEFIK ROUTERS
+# ==============================================================================
+# Description: Traefik dynamic router and Sablier middleware definitions
+# Author: Matt Barham
+# Created: 2026-02-12
+# Modified: 2026-04-21
+# Version: 1.0.1
+# Host: Your Server
+# ==============================================================================
+# Type: Traefik Dynamic Config (routers, middlewares)
+# Component: module: foundryvtt
+# ==============================================================================
+
 http:
   routers:
     foundryvtt:
