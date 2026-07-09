@@ -51,7 +51,7 @@ docker compose up -d
 
 | Variable              | Default                      | Description                    |
 |-----------------------|------------------------------|--------------------------------|
-| `FOUNDRYVTT_IMAGE`    | `felddy/foundryvtt:13.351.0` | Container image                |
+| `FOUNDRYVTT_IMAGE`    | `felddy/foundryvtt:14.364.0` | Container image                |
 | `FOUNDRYVTT_IP`       | `192.168.35.25`              | Static IP on troxy network     |
 | `FOUNDRYVTT_HOST`     | `foundry.${DOMAIN}`          | FoundryVTT public hostname     |
 | `FOUNDRYVTT_DATA_DIR` | `${APPDATA_DIR}/foundryvtt/data` | Persistent data directory  |
